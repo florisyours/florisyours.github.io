@@ -1,7 +1,30 @@
 <!DOCTYPE html>
+<head>
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <script type="module" src="main.js"></script>
+</head>
 <html>
-<body>
-<h1>Hello World!!</h1>
+    <body>
+        <div class = "title">
+            <img src = "crown.png" class = "logo">
+            <h1>
+                Minrle
+            </h1>
+            <img src = "crown.png" class = "logo">
+        </div>
 
-</body>
+        <h4 class = "guesses_box">
+            Guess 1 out of 10
+        </h4>
+        <div class="input_box">
+            <div class="custom_input">
+                <svg xmlns="http://www.w3.org/2000/svg" class="svg_icon bi-search" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"></path></svg>
+                <input class="input" type="text" placeholder="Type a map here..." autcomplete="off">
+                
+            </div>
+            <ul class="suggestions"></ul>
+        </div>
+
+
+    </body>
 </html>
