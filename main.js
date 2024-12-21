@@ -247,7 +247,7 @@ function generateResultsMessage(correct) {
 
 
         if (guessScore >= scoreForYellowSquare) {
-            if (correctMap === guess) {
+            if (isSameMap(guess, correctMap)) {
                 squares += "✅";
             } else {
                 squares += "🟨";
@@ -255,8 +255,8 @@ function generateResultsMessage(correct) {
         } else {
             squares += "🟥";
         }
+        console.log(guessScore);
     });
-
     const wrongEmoji = correct ? "" : "❌";
     return `Minrle #${gameNumber} 👑\n\n${squares}${wrongEmoji}`;
 }
