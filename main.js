@@ -16,6 +16,7 @@ let guessNumber = 1;
 const maxGuesses = 10;
 const scoreForYellowSquare = 3;
 const msToDaysRatio = 1000 * 60 * 60 * 24;
+// update this once in a while for new maps to come in
 const mapCutOff = 701;
 
 // start date in EST
@@ -35,7 +36,13 @@ fetchPossibleMaps().then((maps) => {
   possibleMaps = maps.possibleMaps;
   
   // mod prime returns unique numbers for the entire cycle, which is nice (can break if maps get taken out of ffa and other circumstances, whatever)
-  correctMap = possibleMaps[(445 * gameNumber) % mapCutOff];
+  // i rigged the first two maps btw
+  // debated picking maps that are pretty unique, but i don't care that much
+  correctMap = possibleMaps[(482 * gameNumber + 182) % mapCutOff];
+  console.log(possibleMaps);
+  for (let i = 0; i < mapCutOff; i++) {
+    console.log(possibleMaps[(482 * i + 182) % mapCutOff].Name)
+  }
 
   // load guesses
   const guesses = loadGuesses();

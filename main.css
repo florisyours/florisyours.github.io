@@ -211,7 +211,9 @@ h1 {
 }
 
 .guess-container__title--expert {
-    color: #000000
+    color: #444444;
+    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+
 }
 
 
