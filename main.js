@@ -231,7 +231,7 @@ function copyToClipboard(text) {
 // function to generate the results message
 function generateResultsMessage(correct) {
     let squares = ""; 
-    guesses = loadGuesses();
+    let guesses = loadGuesses();
     guesses.forEach((guess) => {
         const attributes = compareMap(guess, correctMap);
 
