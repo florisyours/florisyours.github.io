@@ -9,8 +9,10 @@ export const fetchPossibleMaps = async () => {
     const response = await fetch(sheetURL);
     const csvText = await response.text();
     const sheetObjects = csvToObjects(csvText);
+    let uniqueMaps = getUniqueMaps(sheetObjects);
+
     sheetObjects.sort((a, b) => (a.Name > b.Name) ? 1 : -1);
-    return {allMaps: sheetObjects, possibleMaps: getUniqueMaps(sheetObjects)};
+    return {allMaps: sheetObjects, possibleMaps: uniqueMaps};
   };
 
 function getUniqueMaps(maps) {
@@ -23,7 +25,7 @@ function getUniqueMaps(maps) {
 
             const comparison = compareMap(maps[i], maps[j]);
 
-            // Check if all fields are "Correct"
+            // check if all fields are "Correct"
             const allCorrect = Object.values(comparison).every(value => value === "Correct");
 
             if (allCorrect) {
@@ -58,7 +60,7 @@ function csvToObjects(csv) {
 function addRow(row, objects) {
 
     let thisObject = {};
-    //thisObject[propertyNames];
+
     thisObject["Name"] = row[0];
     thisObject["Creators"] = row[1];
     thisObject["CreatorCount"] = countOccurences(row[1], ",") + 1;
@@ -90,7 +92,7 @@ function csvSplit(row) {
     const regex = /"(?:[^"]|"")*"|[^,]+/g;
     return Array.from(row.matchAll(regex), match => {
       let value = match[0];
-      // Remove surrounding quotes and unescape double quotes
+      // remove surrounding quotes and unescape double quotes
       if (value.startsWith('"') && value.endsWith('"')) {
         value = value.slice(1, -1).replace(/""/g, '"');
       }

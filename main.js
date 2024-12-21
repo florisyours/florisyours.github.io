@@ -1,15 +1,8 @@
 import { fetchPossibleMaps, compareMap } from './maps.js';
+import { saveGuesses, loadGuesses } from './storage.js'
 var allMaps = [];
 var possibleMaps = [];
-// Create a dummy guess for demonstration purposes
 var correctMap = {}
-fetchPossibleMaps().then((maps) => {
-  console.log('Possible Maps:', maps.possibleMaps);
-  allMaps = maps.allMaps;
-  possibleMaps = maps.possibleMaps;
-  correctMap = possibleMaps[124293552980%703];
-
-});
 
 // Get references to the input element and suggestions container
 const inputElement = document.querySelector('.input');
@@ -18,12 +11,45 @@ const suggestionsElement = document.querySelector('.suggestions');
 // top map of suggestions for if they press enter
 let topSuggestion;
 let guessNumber = 1;
-let guesses = [];
 const maxGuesses = 10;
 const scoreForYellowSquare = 3;
 const msToDaysRatio = 1000 * 60 * 60 * 24;
-const firstDay = new Date("Dec 21 2024");
-const gameNumber = Math.ceil((Date.now() - firstDay) / msToDaysRatio);
+const mapCutOff = 701;
+
+// start date in EST
+const firstDay = new Date("2024-12-21T00:00:00-05:00"); // Specify EST using offset (-05:00)
+
+// current date adjusted to EST
+const now = new Date();
+const easternToday = new Date(
+  now.toLocaleString("en-US", { timeZone: "America/New_York" })
+);
+
+const gameNumber = Math.ceil((easternToday - firstDay) / msToDaysRatio);
+
+fetchPossibleMaps().then((maps) => {
+  //console.log('Possible Maps:', maps.possibleMaps);
+  allMaps = maps.allMaps;
+  possibleMaps = maps.possibleMaps;
+  
+  // mod prime returns unique numbers for the entire cycle, which is nice (can break if maps get taken out of ffa and other circumstances, whatever)
+  correctMap = possibleMaps[(445 * gameNumber) % mapCutOff];
+
+  // load guesses
+  const guesses = loadGuesses();
+  guessNumber = guesses.length + 1
+  if (guessNumber > 1) {
+      console.log("Loaded guesses:", guesses);
+
+      guesses.forEach((guess) => createGuess(guess))
+       //update guesses text
+      updateGuesses();
+      checkCorrectOrOutOfGuesses(guesses[guesses.length - 1])
+
+  }
+
+});
+
 
 function updateGuesses() {
     let guessesBox = document.querySelector(".guesses_box")
@@ -88,9 +114,17 @@ document.querySelector('.input').addEventListener('keydown', (event) => {
 });
 
 function guessMap(map) {
-    if (map && !guesses.includes(map)) {
+    let guesses = loadGuesses();
+    console.log(guesses)
+
+    // check if guesses contains map, have to compare strings because === does not work
+    let containsMap = guesses.some(guess => JSON.stringify(guess) === JSON.stringify(map))
+    if (map && !containsMap) {
         guessNumber++;
-        guesses.push(map)
+
+        const currentGuesses = loadGuesses();
+        currentGuesses.push(map);
+        saveGuesses(currentGuesses);
 
         // update guess title
         updateGuesses()
@@ -121,7 +155,8 @@ function createGuess(map) {
     mapDiv.appendChild(nameDiv);
 
     // add creators if correct
-    if (correctMap === map) {
+
+    if (isSameMap(map, correctMap)) {
         addCreatorsElement(mapDiv, map);
     }
 
@@ -143,6 +178,10 @@ function createGuess(map) {
     document.querySelector(".input_box").after(guessContainer);
 }
 
+function isSameMap(mapOne, mapTwo) {
+    return JSON.stringify(mapOne) === JSON.stringify(mapTwo)
+}
+
 function addCreatorsElement(mapDiv, map) {
     // add a div for the title of the map
     const nameDiv = document.createElement('div');
@@ -153,7 +192,7 @@ function addCreatorsElement(mapDiv, map) {
 }
 
 async function checkCorrectOrOutOfGuesses(guess) {
-    let correct = correctMap == guess;
+    let correct = isSameMap(guess, correctMap);
     let outOfGuesses = guessNumber > maxGuesses;
 
     if (outOfGuesses || correct) {
@@ -192,6 +231,7 @@ function copyToClipboard(text) {
 // function to generate the results message
 function generateResultsMessage(correct) {
     let squares = ""; 
+    guesses = loadGuesses();
     guesses.forEach((guess) => {
         const attributes = compareMap(guess, correctMap);
 
