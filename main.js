@@ -1,3 +1,5 @@
+// what 1 web programming class does to a mf. ugly code and structure ahead!!! i did not care enough
+
 import { fetchPossibleMaps, compareMap } from './maps.js';
 import { saveGuesses, loadGuesses } from './storage.js'
 var allMaps = [];
