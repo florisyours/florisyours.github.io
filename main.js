@@ -109,20 +109,26 @@ function createGuess(map) {
     const guessContainer = document.createElement('div');
     guessContainer.className = 'guess-container';
         
+
+    // add a div for the map (title and optionally creator)
+    const mapDiv = document.createElement('div');
+    mapDiv.className = 'guess-container__map'
     // add a div for the title of the map
     const nameDiv = document.createElement('div');
     let difficultyClassName = getDifficultyClass(map.Difficulty)
-    nameDiv.classList.add('guess-container__title', difficultyClassName);
+    nameDiv.classList.add('guess-container__map__title', difficultyClassName);
     nameDiv.textContent = map.Name;
-    guessContainer.appendChild(nameDiv);
-        
-    // compare the guess with the correct map
-    const attributes = compareMap(correctMap, map);
+    mapDiv.appendChild(nameDiv);
 
     // add creators if correct
     if (correctMap === map) {
-        addCreatorsElement(guessContainer, map);
+        addCreatorsElement(mapDiv, map);
     }
+
+    guessContainer.appendChild(mapDiv)
+
+    // compare the guess with the correct map
+    const attributes = compareMap(correctMap, map);
         
         
     // add divs for each field
@@ -137,13 +143,13 @@ function createGuess(map) {
     document.querySelector(".input_box").after(guessContainer);
 }
 
-function addCreatorsElement(guessContainer, map) {
+function addCreatorsElement(mapDiv, map) {
     // add a div for the title of the map
     const nameDiv = document.createElement('div');
     let difficultyClassName = getDifficultyClass(map.Difficulty)
-    nameDiv.classList.add('guess-container__creators', difficultyClassName);
+    nameDiv.classList.add('guess-container__map__creators', difficultyClassName);
     nameDiv.textContent = `by ${map.Creators}`;
-    guessContainer.appendChild(nameDiv);
+    mapDiv.appendChild(nameDiv);
 }
 
 async function checkCorrectOrOutOfGuesses(guess) {

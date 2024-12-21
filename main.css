@@ -1,3 +1,10 @@
+* {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    text-decoration: none;
+}
+
 html {
     background-color: #222222;
     height: 100%;
@@ -13,8 +20,8 @@ body {
 }
 
 .title {
-    margin-top: 5%;
-    margin-bottom: 5%;
+    margin-top: 30px;
+    margin-bottom: 20px;
     display: flex;
     flex-direction: row;
     width: 100%;
@@ -24,26 +31,19 @@ body {
 
 h1 {
     text-align: center;
-    margin-left: 5%;
-    margin-right: 5%;
+    margin-left: 40px;
+    margin-right: 40px;
     color: #ffaa00;
-    font-size: 4em;
+    font-size: 60px;
 }
 
 .logo {
-    width: 12%;
+    width: 120px;
 }
 
 .guesses_box {
     color: #ffffff;
-    font-size: 1.5em;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    text-decoration: none;
+    font-size: 23px;
 }
 
 .input_box {
@@ -61,11 +61,12 @@ h1 {
 }
 
 .input {
-	font-size: 3em;
+	font-size: 60px;
 	padding: 5px 10px;
-    height: 2.5em;
+    height: 150px;
     width: 100%;
-	padding-right: 10px;
+	padding-right: 100px;
+    padding-left: 30px;
 	outline: none;
 	background: #FFFFFF;
 	border-radius: 5px;
@@ -91,14 +92,15 @@ h1 {
 	position: absolute;
 	right: 35px;
 	fill: #000000;
-	width: 3em;
-	height: 3em;
+	width: 45px;
+	height: 45px;
 }
 
 .suggestions {
     list-style-type: none;
     top: 115%;
-    max-height: 25em;
+    max-height: 700px;
+    
     overflow-y: auto;
     background: #ffffffdd;
     width: 100%;
@@ -110,20 +112,21 @@ h1 {
 .suggestions li {
     padding: 8px;
     cursor: pointer;
-    font-size: 2em;
+    font-size: 50px;
 }
 .suggestions li:hover {
     background-color: #f0f0f0;
 }
 
-/* Styling the guess container */
+
 .guess-container {
     display: flex;
     flex-direction: row;
     margin: 10px 0;
     padding: 10px;
     border-radius: 5px;
-    width: 80%;
+    width: 90%;
+    max-width: 1000px;
     z-index: 1;
     align-items:center;
     flex-wrap: wrap;
@@ -131,19 +134,19 @@ h1 {
     justify-content: center;
 }
 
-/* Styling individual field divs */
+
 .field {
-    padding: 5px 10px;
+    padding: 5px 1px;
     margin: 5px 10px;
     border-radius: 5px;
-    font-size: 1.2em;
+    font-size: 24px;
     text-align: left;
     display: flex;
     flex-direction: column;
     justify-content: center;
 
-    width: 25%;
-    height: 3em;
+    width: 270px;
+    height: 80px;
     border-radius: 10%/40%;
 }
 
@@ -155,18 +158,21 @@ h1 {
     text-align: center;
 }
 
-.guess-container__title {
+.guess-container__map {
     width:100%;
-    font-size: 4em;
     justify-self: flex-start;
+    margin-bottom: 10px;
+}
+
+.guess-container__map__title {
+    font-size: 50px;
     text-align: center;
     font-weight: bold;
 }
 
-.guess-container__creators {
+.guess-container__map__creators {
     width:100%;
-    font-size: 1.5em;
-    justify-self: flex-start;
+    font-size: 30px;
     text-align: center;
     font-weight: bold;
 }
@@ -203,17 +209,17 @@ h1 {
     color: #000000
 }
 
-/* Result-based background colors */
+
 .field.correct {
-    background-color: #a8e6a2; /* Green for "Correct" */
+    background-color: #a8e6a2;
 }
 
 .field.close {
-    background-color: #ffe680; /* Yellow for "Close" */
+    background-color: #ffe680;
 }
 
 .field.wrong {
-    background-color: #737373; /* Gray for "Wrong" */
+    background-color: #737373;
 }
 
 .share-button {
@@ -221,99 +227,96 @@ h1 {
     background-color: #777777;
     color: #fff;
     border: none;
-    border-radius: 5px;
+    border-radius: 20px;
     cursor: pointer;
-    font-size: 2em;
+    font-size: 50px;
     margin-top: 20px;
     transition: background-color 0.3s;
-    width: 25%;
+    width: 350px;
 }
 
 .share-button:hover {
     background-color: #555555;
 }
 
-/*
-/* desktop css rules
-@media screen and (min-width: 1025px) {
-
-    html {
-        justify-content: center;
+@media screen and (min-width: 1020px) {
+    
+    .title {
+        margin-top: 30px;
+        margin-bottom: 20px;
     }
-    body {
-        margin-left: 5%;
-        margin-right: 5%;
-    }
-
+    
     h1 {
-        font-size: 2em;
+        margin-left: 20px;
+        margin-right: 20px;
+        font-size: 30px;
     }
-
+    
     .logo {
-        width: 50px;
+        width: 90px;
+    }
+    
+    .guesses_box {
+        font-size: 23px;
     }
     
     .input {
-        font-size: 1em;
+        font-size: 30px;
+        height: 75px;
+        padding-right: 90px;
+        width: 250px;
     }
-
+    
     .svg_icon {
-        right: 15px;
-        width: 15px;
-        height: 15px;
+        right: 20px;
+        width: 30px;
+        height: 30px;
     }
     
     .suggestions {
-        max-height: 150px;
+        top: 115%;
+        max-height: 400px;
+    
     }
     .suggestions li {
-        font-size: 10px;
+        padding: 8px;
+        cursor: pointer;
+        font-size: 25px;
     }
     
     .guess-container {
-        margin-top: 0px;
-        margin-bottom: 0px;
+        max-width: 500px;
+        margin: 5px 0;
+        padding: 0;
     }
+    
     
     .field {
-        font-size: 0.7em;
-        width: 19%;
-        height: 2em;
-        border-radius: 10%/40%;
-        margin: 0.4em;
+        font-size: 10px;
+        margin: 5px 5px;
+        width: 120px;
+        height: 40px;
     }
     
-    .field h2 {
-        text-align: center;
-        font-size: 0.8em;
+    .guess-container__map {
+        margin-bottom: 5px;
     }
     
-    .field h3 {
-        text-align: center;
-        font-size: 0.8em;
+    .guess-container__map__title {
+        font-size: 25px;
     }
     
-    .guess-container__title {
-        font-size: 1.5em;
+    .guess-container__map__creators {
+        font-size: 15px;
     }
-    
-    .guess-container__creators {
-        width:100%;
-        font-size: 1em;
-        justify-self: flex-start;
-        text-align: center;
-        font-weight: bold;
-    }
+
     
     .share-button {
-        font-size: 0.7em;
-        padding: 10px;
-    }
-    
-    .share-button:hover {
-        background-color: #555555;
+        margin-top: 20px;
+        margin-bottom: 10px;
+        width: 200px;
+
+        font-size: 25px;
     }
 
-    
-
-}*/
+}
