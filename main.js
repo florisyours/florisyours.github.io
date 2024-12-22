@@ -19,18 +19,11 @@ const msToDaysRatio = 1000 * 60 * 60 * 24;
 // update this once in a while for new maps to come in
 const mapCutOff = 701;
 
-// start date in EST
-const firstDay = new Date("2024-12-21T00:00:00-05:00"); // Specify EST using offset (-05:00)
-
-// current date adjusted to EST
+// start date in UTC
+const firstDay = new Date("2024 Dec 21"); 
 const now = new Date();
 
-const easternToday = new Date(
-  now.toLocaleString("en-US", { timeZone: "America/New_York" })
-);
-
-const gameNumber = Math.ceil((easternToday - firstDay) / msToDaysRatio);
-
+const gameNumber = Math.ceil((now - firstDay) / msToDaysRatio);
 fetchPossibleMaps().then((maps) => {
     //console.log('Possible Maps:', maps.possibleMaps);
     allMaps = maps.allMaps;
