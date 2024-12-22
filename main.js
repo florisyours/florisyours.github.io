@@ -4,7 +4,7 @@ import { fetchPossibleMaps, compareMap } from './maps.js';
 import { saveGuesses, loadGuesses } from './storage.js'
 var allMaps = [];
 var possibleMaps = [];
-var correctMap = {}
+var correctMap = {};
 
 // Get references to the input element and suggestions container
 const inputElement = document.querySelector('.input');
@@ -39,21 +39,17 @@ fetchPossibleMaps().then((maps) => {
   // i rigged the first two maps btw
   // debated picking maps that are pretty unique, but i don't care that much
   correctMap = possibleMaps[(482 * gameNumber + 182) % mapCutOff];
-  console.log(possibleMaps);
-  for (let i = 0; i < mapCutOff; i++) {
-    console.log(possibleMaps[(482 * i + 182) % mapCutOff].Name)
-  }
 
   // load guesses
   const guesses = loadGuesses();
-  guessNumber = guesses.length + 1
+  guessNumber = guesses.length + 1;
   if (guessNumber > 1) {
       console.log("Loaded guesses:", guesses);
 
       guesses.forEach((guess) => createGuess(guess))
        //update guesses text
       updateGuesses();
-      checkCorrectOrOutOfGuesses(guesses[guesses.length - 1])
+      checkCorrectOrOutOfGuesses(guesses[guesses.length - 1]);
 
   }
 
@@ -61,8 +57,8 @@ fetchPossibleMaps().then((maps) => {
 
 
 function updateGuesses() {
-    let guessesBox = document.querySelector(".guesses_box")
-    guessesBox.textContent = `Guess ${guessNumber} out of ${maxGuesses}`
+    let guessesBox = document.querySelector(".guesses_box");
+    guessesBox.textContent = `Guess ${guessNumber} out of ${maxGuesses}`;
 }
 
 // listen to input in input box
@@ -72,11 +68,11 @@ inputElement.addEventListener('input', (event) => {
     // clear suggestions if query is empty
     if (query == "") {
         suggestionsElement.innerHTML = '';
-        return
+        return;
     }
     const filteredMaps = allMaps.filter(map =>
         map.Name.toLowerCase().startsWith(query) // match starting letters
-    );
+    )
 
     topSuggestion = filteredMaps[0];
 
@@ -136,11 +132,11 @@ function guessMap(map) {
         saveGuesses(currentGuesses);
 
         // update guess title
-        updateGuesses()
+        updateGuesses();
 
-        createGuess(map)
+        createGuess(map);
 
-        checkCorrectOrOutOfGuesses(map)
+        checkCorrectOrOutOfGuesses(map);
     } else {
         // invalid map
     }
@@ -155,10 +151,10 @@ function createGuess(map) {
 
     // add a div for the map (title and optionally creator)
     const mapDiv = document.createElement('div');
-    mapDiv.className = 'guess-container__map'
+    mapDiv.className = 'guess-container__map';
     // add a div for the title of the map
     const nameDiv = document.createElement('div');
-    let difficultyClassName = getDifficultyClass(map.Difficulty)
+    let difficultyClassName = getDifficultyClass(map.Difficulty);
     nameDiv.classList.add('guess-container__map__title', difficultyClassName);
     nameDiv.textContent = map.Name;
     mapDiv.appendChild(nameDiv);
@@ -169,7 +165,7 @@ function createGuess(map) {
         addCreatorsElement(mapDiv, map);
     }
 
-    guessContainer.appendChild(mapDiv)
+    guessContainer.appendChild(mapDiv);
 
     // compare the guess with the correct map
     const attributes = compareMap(correctMap, map);
@@ -188,13 +184,13 @@ function createGuess(map) {
 }
 
 function isSameMap(mapOne, mapTwo) {
-    return JSON.stringify(mapOne) === JSON.stringify(mapTwo)
+    return JSON.stringify(mapOne) === JSON.stringify(mapTwo);
 }
 
 function addCreatorsElement(mapDiv, map) {
     // add a div for the title of the map
     const nameDiv = document.createElement('div');
-    let difficultyClassName = getDifficultyClass(map.Difficulty)
+    let difficultyClassName = getDifficultyClass(map.Difficulty);
     nameDiv.classList.add('guess-container__map__creators', difficultyClassName);
     nameDiv.textContent = `by ${map.Creators}`;
     mapDiv.appendChild(nameDiv);
@@ -223,7 +219,7 @@ async function checkCorrectOrOutOfGuesses(guess) {
         shareButton.addEventListener('click', () => {
             const resultsMessage = generateResultsMessage(correct, outOfGuesses);
             copyToClipboard(resultsMessage);
-            shareButton.textContent = "Copied!"
+            shareButton.textContent = "Copied!";
         });
         
 
@@ -310,20 +306,20 @@ function createFieldElements(field, map, fieldDiv) {
     const fieldTitle = document.createElement('h3');
     const fieldContent = document.createElement('h2');
     
-    let fields = ['CreatorCount', 'Type', 'Date', 'Difficulty', 'PureOrMixed', 'Location']
-    let properFieldNames = ['Creators', 'Primary Type', 'Released', 'Difficulty', 'Pure', 'Location']
+    let fields = ['CreatorCount', 'Type', 'Date', 'Difficulty', 'PureOrMixed', 'Location'];
+    let properFieldNames = ['Creators', 'Primary Type', 'Released', 'Difficulty', 'Pure', 'Location'];
 
     fieldTitle.textContent = properFieldNames[fields.indexOf(field)]
 
     if (field == "CreatorCount") {
-        let numbers = ["Solo", "Duo", "Three", "Four", "Five", "Six", "Seven", "Eight"]
-        fieldContent.textContent = numbers[map[field] - 1]
+        let numbers = ["Solo", "Duo", "Three", "Four", "Five", "Six", "Seven", "Eight"];
+        fieldContent.textContent = numbers[map[field] - 1];
     } else if (field == "Date") {
         // denote whether date is before or after date guessed
         if (correctMap.Date < map.Date) {
-            fieldContent.textContent = `< ${map.DateAsString}`
+            fieldContent.textContent = `< ${map.DateAsString}`;
         } else if (correctMap.Date > map.Date) {
-            fieldContent.textContent = `${map.DateAsString} >`
+            fieldContent.textContent = `${map.DateAsString} >`;
         } else {
             fieldContent.textContent = map.DateAsString;
         }
@@ -333,3 +329,35 @@ function createFieldElements(field, map, fieldDiv) {
     fieldDiv.appendChild(fieldTitle);
     fieldDiv.appendChild(fieldContent);
 }
+
+
+// tooltip stuff which I made chatgpt write because I got lazy
+document.addEventListener("DOMContentLoaded", () => {
+    // Get all tooltip containers
+    const tooltipContainers = document.querySelectorAll(".tooltip-container");
+  
+    // Add click event listeners to each tooltip container
+    tooltipContainers.forEach((container) => {
+      container.addEventListener("click", (event) => {
+        event.stopPropagation(); // Prevent the event from propagating to the document
+        container.classList.toggle("show-tooltip");
+      });
+  
+      // Add event listener to close button
+      const closeButton = container.querySelector(".close-btn");
+      if (closeButton) {
+        closeButton.addEventListener("click", (event) => {
+          event.stopPropagation(); // Prevent parent container toggle
+          container.classList.remove("show-tooltip");
+        });
+      }
+    });
+  
+    // Hide all tooltips when clicking anywhere outside
+    document.addEventListener("click", () => {
+      tooltipContainers.forEach((container) => {
+        container.classList.remove("show-tooltip");
+      });
+    });
+  });
+

@@ -33,7 +33,7 @@ function getUniqueMaps(maps) {
             }
         }
         if (unique) {
-            uniqueMaps.push(maps[i])
+            uniqueMaps.push(maps[i]);
         }
     }
 
@@ -48,7 +48,7 @@ function csvToObjects(csv) {
 
     // check if map has been removed, do not include in this case
     if (!(row[7] == "Removed" && row[7] == "Broken")) {
-        addRow(row, objects)
+        addRow(row, objects);
     }
 
   }
@@ -66,9 +66,9 @@ function addRow(row, objects) {
     thisObject["CreatorCount"] = countOccurences(row[1], ",") + 1;
     thisObject["Type"] = row[2];
     if (row[3].includes("-")) {
-        thisObject["PureOrMixed"] = "Pure"
+        thisObject["PureOrMixed"] = "Pure";
     } else {
-        thisObject["PureOrMixed"] = "Mixed"
+        thisObject["PureOrMixed"] = "Mixed";
     }
     // HC maps include FFA+ in the name if they are FFA+
     if (row[7].includes("FFA+")) {
@@ -123,9 +123,9 @@ export function compareMap(guess, correctMap) {
     }
 
     if (guess.Location == correctMap.Location) {
-        attributes.Location = "Correct"
+        attributes.Location = "Correct";
     } else {
-        attributes.Location = "Wrong"
+        attributes.Location = "Wrong";
     }
 
     attributes.Difficulty = compareDifficulty(guess, correctMap)
@@ -133,18 +133,18 @@ export function compareMap(guess, correctMap) {
     const msToDaysRatio = 1000 * 60 * 60 * 24
     let dayDifference = Math.abs((correctMap.Date - guess.Date) / msToDaysRatio);
     if (dayDifference == 0) {
-        attributes.Date = "Correct"
+        attributes.Date = "Correct";
     } else if (dayDifference <= dayDifferenceForClose) {
-        attributes.Date = "Close"
+        attributes.Date = "Close";
     } else {
-        attributes.Date = "Wrong"
+        attributes.Date = "Wrong";
     }
 
     return attributes
 }
 
 function compareDifficulty(guess, correctMap) {
-    const difficultyOrder = ["Unassessed", "Very Easy", "Easy", "Novice", "Moderate", "Hard", "Very Hard", "Expert"]
+    const difficultyOrder = ["Unassessed", "Very Easy", "Easy", "Novice", "Moderate", "Hard", "Very Hard", "Expert"];
     let guessIndex = difficultyOrder.indexOf(guess.Difficulty);
     let correctIndex = difficultyOrder.indexOf(correctMap.Difficulty);
 

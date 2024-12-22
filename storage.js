@@ -1,7 +1,7 @@
 const STORAGE_KEY = "userGuesses";
 const CURRENT_GAME_KEY = "guessesExpiration";
 const today = new Date();
-const todaysGameDate = today.toLocaleDateString("en-US", {timeZone: "America/New_York"})
+const todaysGameDate = today.toLocaleDateString("en-US", {timeZone: "America/New_York"});
 
 // Save guesses to localStorage with expiration
 export function saveGuesses(guesses) {

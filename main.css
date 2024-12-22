@@ -42,10 +42,73 @@ h1 {
     width: 90px;
 }
 
+.info_box {
+    width: 250px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
 .guesses_box {
     color: #ffffff;
-    font-size: 18px;
-    max-width: 100%;
+    font-size: 15px;
+    text-align: start;
+    height: 18px;
+    align-self: flex-end;
+}
+
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    color: #ffffff;
+    font-size: 20px;
+    width: 15px;
+    text-align: center;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    width: 320px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 20px;
+    position: absolute;
+    z-index: 11;
+    top: 125%; /* Position below the element */
+    right: 0px;
+    transform: translateX(55px);
+    opacity: 0;
+    transition: visibility 0.3s, opacity 0.3s;
+}
+
+/* Class to make the tooltip visible when toggled */
+.tooltip-container.show-tooltip .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+.tooltip-text .close-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 12px;
+    background: none;
+    border: none;
+}
+
+.close-btn {
+    position: absolute;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    margin-left: 10px;
 }
 
 .input_box {
@@ -246,6 +309,15 @@ h1 {
 
 .share-button:hover {
     background-color: #555555;
+}
+
+.examples {
+    margin-top: 15px;
+    display: flex;
+    width: 200px;
+    flex-direction: row;
+    gap: 15px;
+
 }
 
 @media screen and (max-width: 350px) {
