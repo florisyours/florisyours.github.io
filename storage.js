@@ -1,18 +1,17 @@
 const STORAGE_KEY = "userGuesses";
 const CURRENT_GAME_KEY = "guessesExpiration";
 
+const today = new Date();
+const todaysGameDate = today.toLocaleDateString("en-US");
+
 // Save guesses to localStorage with expiration
 export function saveGuesses(guesses) {
-    const today = new Date();
-    const todaysGameDate = today.toLocaleDateString("en-US");
     localStorage.setItem(STORAGE_KEY, JSON.stringify(guesses));
     localStorage.setItem(CURRENT_GAME_KEY, todaysGameDate);
 }
 
 // Load guesses from localStorage if on same game
 export function loadGuesses() {
-    const today = new Date();
-    const todaysGameDate = today.toLocaleDateString("en-US");
     const currentGame = localStorage.getItem(CURRENT_GAME_KEY);
     if (currentGame && currentGame == todaysGameDate) {
         let guesses = localStorage.getItem(STORAGE_KEY);
