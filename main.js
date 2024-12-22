@@ -32,18 +32,24 @@ fetchPossibleMaps().then((maps) => {
     possibleMaps = maps.possibleMaps;
 
     //console.log(possibleMaps)
-
-    let firstCorrectMaps = [182, 664, 445, 2]
   
+    let firstCorrectMaps = ["Haunted Tower", "Egghunt 3", "Blight", "Jiga's Claymaze"]; // Replace with actual map names
+
     if (gameNumber < firstCorrectMaps.length) {
-        correctMap = possibleMaps[firstCorrectMaps[gameNumber]]
+        const mapName = firstCorrectMaps[gameNumber];
+        correctMap = possibleMaps.find(map => map.Name == mapName);
+
+        // fallback to the mod function
+        if (!correctMap) {
+             correctMap = possibleMaps[(482 * gameNumber + 182) % mapCutOff];
+        }
     } else {
     // mod prime returns unique numbers for the entire cycle, which is nice (can break if maps get taken out of ffa and other circumstances, whatever)
         correctMap = possibleMaps[(482 * gameNumber + 182) % mapCutOff];
     }
 
     // load guesses
-    const guesses = loadGuesses();
+    const guesses = loadGuesses(possibleMaps);
     guessNumber = guesses.length + 1;
     if (guessNumber > 1) {
         console.log("Loaded guesses:", guesses);
@@ -251,7 +257,7 @@ function copyToClipboard(text) {
 // function to generate the results message
 function generateResultsMessage(correct) {
     let squares = ""; 
-    let guesses = loadGuesses();
+    let guesses = loadGuesses(possibleMaps);
     guesses.forEach((guess) => {
         const attributes = compareMap(guess, correctMap);
 
