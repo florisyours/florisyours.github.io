@@ -169,6 +169,10 @@ function createGuess(map, doAnimation) {
 
     guessContainer.appendChild(mapDiv);
 
+    console.log(gameNumber);
+    console.log(now);
+    console.log(firstDay);
+
     // compare the guess with the correct map
     const attributes = compareMap(correctMap, map);
         
