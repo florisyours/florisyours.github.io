@@ -31,14 +31,12 @@ const easternToday = new Date(
 
 const gameNumber = Math.ceil((easternToday - firstDay) / msToDaysRatio);
 
-console.log((easternToday - firstDay) / msToDaysRatio)
-
 fetchPossibleMaps().then((maps) => {
     //console.log('Possible Maps:', maps.possibleMaps);
     allMaps = maps.allMaps;
     possibleMaps = maps.possibleMaps;
 
-    console.log(possibleMaps)
+    //console.log(possibleMaps)
 
     let firstCorrectMaps = [182, 664, 445, 2]
   
