@@ -46,7 +46,7 @@ fetchPossibleMaps().then((maps) => {
   if (guessNumber > 1) {
       console.log("Loaded guesses:", guesses);
 
-      guesses.forEach((guess) => createGuess(guess))
+      guesses.forEach((guess) => createGuess(guess, false))
        //update guesses text
       updateGuesses();
       checkCorrectOrOutOfGuesses(guesses[guesses.length - 1]);
@@ -134,7 +134,7 @@ function guessMap(map) {
         // update guess title
         updateGuesses();
 
-        createGuess(map);
+        createGuess(map, true);
 
         checkCorrectOrOutOfGuesses(map);
     } else {
@@ -143,7 +143,7 @@ function guessMap(map) {
 }
 
 // create and add guess html elements
-function createGuess(map) {
+function createGuess(map, doAnimation) {
     // create a div for the guess
     const guessContainer = document.createElement('div');
     guessContainer.className = 'guess-container';
@@ -172,12 +172,19 @@ function createGuess(map) {
         
         
     // add divs for each field
-    ['CreatorCount', 'Type', 'Date', 'Difficulty', 'PureOrMixed', 'Location'].forEach((field) => {
+    let fields = ['CreatorCount', 'Type', 'Date', 'Difficulty', 'PureOrMixed', 'Location']
+    for(let i = 0; i < fields.length; i++) {
+        let field = fields[i];
         const fieldDiv = document.createElement('div');
         fieldDiv.className = `field ${attributes[field].toLowerCase()}`; // Add class based on the result
+
+        // animate color appearing
+        if (doAnimation) {
+            fieldDiv.style.animationDelay = `${i * 0.15}s`
+        }
         addFieldText(field, map, fieldDiv);
         guessContainer.appendChild(fieldDiv);
-    });
+    };
         
     // add after input_box
     document.querySelector(".input_box").after(guessContainer);
@@ -207,7 +214,7 @@ async function checkCorrectOrOutOfGuesses(guess) {
         if (!correct) {
             // sleep for a bit so that it does not seem like they got it correct with their latest guess
             await new Promise(r => setTimeout(r, 500));
-            createGuess(correctMap);
+            createGuess(correctMap, true);
         }
 
         // create button for sharing result

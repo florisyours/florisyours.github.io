@@ -280,15 +280,18 @@ h1 {
 
 
 .field.correct {
-    background-color: #a8e6a2;
+    background-color: #737373;
+    animation: correctChange 2s ease forwards;
 }
 
 .field.close {
-    background-color: #ffe680;
+    background-color: #737373;
+    animation: closeChange 2s ease forwards;
 }
 
 .field.wrong {
     background-color: #737373;
+    animation: wrongChange 2s ease forwards;
 }
 
 .share-button {
@@ -322,5 +325,32 @@ h1 {
 @media screen and (max-width: 350px) {
     .field {
         font-size: 9px;
+    }
+}
+
+@keyframes correctChange {
+    0% {
+      background-color: #737373;
+    }
+    100% {
+      background-color: #a8e6a2;
+    }
+}
+
+  @keyframes closeChange {
+    0% {
+      background-color: #737373;
+    }
+    100% {
+      background-color: #ffe680;
+    }
+}
+
+  @keyframes wrongChange {
+    0% {
+      background-color: #737373;
+    }
+    100% {
+      background-color: #737373;
     }
 }
