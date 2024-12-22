@@ -77,14 +77,13 @@ h1 {
     padding: 20px;
     position: absolute;
     z-index: 11;
-    top: 125%; /* Position below the element */
+    top: 125%; 
     right: 0px;
     transform: translateX(55px);
     opacity: 0;
     transition: visibility 0.3s, opacity 0.3s;
 }
 
-/* Class to make the tooltip visible when toggled */
 .tooltip-container.show-tooltip .tooltip-text {
     visibility: visible;
     opacity: 1;
