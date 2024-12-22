@@ -127,16 +127,15 @@ document.querySelector('.input').addEventListener('keydown', (event) => {
 });
 
 function guessMap(map) {
-    let guesses = loadGuesses();
+    let guesses = loadGuesses(possibleMaps);
     console.log(guesses)
 
     // check if guesses contains map, have to compare strings because === does not work
     let containsMap = guesses.some(guess => JSON.stringify(guess) === JSON.stringify(map))
     if (map && !containsMap) {
         guessNumber++;
-
-        const currentGuesses = loadGuesses();
-        currentGuesses.push(map);
+        
+        guesses.push(map);
         saveGuesses(currentGuesses);
 
         // update guess title
