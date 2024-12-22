@@ -80,8 +80,10 @@ function addRow(row, objects) {
     } else {
         thisObject["PureOrMixed"] = "Mixed";
     }
-    // HC maps include FFA+ in the name if they are FFA+
-    if (row[7].includes("FFA+")) {
+    // HC maps have different characters in them
+    if (row[7].includes("HC")) {
+        thisObject["Location"] = "HC";
+    } else if (row[7].includes("FFA+")) {
         thisObject["Location"] = "FFA+";
       } else {
         thisObject["Location"] = "FFA";
