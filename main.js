@@ -24,41 +24,43 @@ const firstDay = new Date("2024-12-21T00:00:00-05:00"); // Specify EST using off
 
 // current date adjusted to EST
 const now = new Date();
+
 const easternToday = new Date(
   now.toLocaleString("en-US", { timeZone: "America/New_York" })
 );
 
-easternToday.setHours(0, 0, 0, 0);
-
 const gameNumber = Math.ceil((easternToday - firstDay) / msToDaysRatio);
 
+console.log((easternToday - firstDay) / msToDaysRatio)
+
 fetchPossibleMaps().then((maps) => {
-  //console.log('Possible Maps:', maps.possibleMaps);
-  allMaps = maps.allMaps;
-  possibleMaps = maps.possibleMaps;
+    //console.log('Possible Maps:', maps.possibleMaps);
+    allMaps = maps.allMaps;
+    possibleMaps = maps.possibleMaps;
 
-  let firstCorrectMaps = [182, 664, 445, 2]
+    console.log(possibleMaps)
+
+    let firstCorrectMaps = [182, 664, 445, 2]
   
-  if (gameNumber < firstCorrectMaps.length) {
-    correctMap = possibleMaps[firstCorrectMaps[gameNumber]]
-  } else {
+    if (gameNumber < firstCorrectMaps.length) {
+        correctMap = possibleMaps[firstCorrectMaps[gameNumber]]
+    } else {
+    // mod prime returns unique numbers for the entire cycle, which is nice (can break if maps get taken out of ffa and other circumstances, whatever)
+        correctMap = possibleMaps[(482 * gameNumber + 182) % mapCutOff];
+    }
 
-  }
-  // mod prime returns unique numbers for the entire cycle, which is nice (can break if maps get taken out of ffa and other circumstances, whatever)
-  correctMap = possibleMaps[(482 * gameNumber + 182) % mapCutOff];
+    // load guesses
+    const guesses = loadGuesses();
+    guessNumber = guesses.length + 1;
+    if (guessNumber > 1) {
+        console.log("Loaded guesses:", guesses);
 
-  // load guesses
-  const guesses = loadGuesses();
-  guessNumber = guesses.length + 1;
-  if (guessNumber > 1) {
-      console.log("Loaded guesses:", guesses);
+        guesses.forEach((guess) => createGuess(guess, false))
+        //update guesses text
+        updateGuesses();
+        checkCorrectOrOutOfGuesses(guesses[guesses.length - 1], false);
 
-      guesses.forEach((guess) => createGuess(guess, false))
-       //update guesses text
-      updateGuesses();
-      checkCorrectOrOutOfGuesses(guesses[guesses.length - 1], false);
-
-  }
+    }
 
 });
 
