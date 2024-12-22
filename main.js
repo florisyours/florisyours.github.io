@@ -24,6 +24,8 @@ const firstDay = new Date("2024 Dec 21");
 const now = new Date();
 
 const gameNumber = Math.ceil((now - firstDay) / msToDaysRatio);
+console.log(gameNumber)
+
 fetchPossibleMaps().then((maps) => {
     //console.log('Possible Maps:', maps.possibleMaps);
     allMaps = maps.allMaps;
