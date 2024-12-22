@@ -20,7 +20,7 @@ const msToDaysRatio = 1000 * 60 * 60 * 24;
 const mapCutOff = 701;
 
 // start date in UTC
-const firstDay = new Date("2024 Dec 21"); 
+const firstDay = new Date("2024-12-21T00:00:00Z");
 const now = new Date();
 
 const gameNumber = Math.ceil((now - firstDay) / msToDaysRatio);
