@@ -28,6 +28,7 @@ function getUniqueMaps(maps) {
             // check if all fields are "Correct"
             const allCorrect = Object.values(comparison).every(value => value === "Correct");
 
+
             if (allCorrect) {
                 unique = false;
             }
@@ -132,7 +133,7 @@ export function compareMap(guess, correctMap) {
 
     const msToDaysRatio = 1000 * 60 * 60 * 24
     let dayDifference = Math.abs((correctMap.Date - guess.Date) / msToDaysRatio);
-    if (dayDifference == 0) {
+    if (correctMap.DateAsString == guess.DateAsString) {
         attributes.Date = "Correct";
     } else if (dayDifference <= dayDifferenceForClose) {
         attributes.Date = "Close";

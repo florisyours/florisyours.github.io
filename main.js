@@ -28,18 +28,21 @@ const easternToday = new Date(
   now.toLocaleString("en-US", { timeZone: "America/New_York" })
 );
 
+easternToday.setHours(0, 0, 0, 0);
+
 const gameNumber = Math.ceil((easternToday - firstDay) / msToDaysRatio);
 
 fetchPossibleMaps().then((maps) => {
   //console.log('Possible Maps:', maps.possibleMaps);
   allMaps = maps.allMaps;
   possibleMaps = maps.possibleMaps;
+  console.log(possibleMaps)
+  let firstCorrectMaps = [182, 664, 445, 2]
   
   // mod prime returns unique numbers for the entire cycle, which is nice (can break if maps get taken out of ffa and other circumstances, whatever)
-  // i rigged the first two maps btw
-  // debated picking maps that are pretty unique, but i don't care that much
   correctMap = possibleMaps[(482 * gameNumber + 182) % mapCutOff];
 
+    console.log(correctMap)
   // load guesses
   const guesses = loadGuesses();
   guessNumber = guesses.length + 1;
@@ -325,13 +328,15 @@ function createFieldElements(field, map, fieldDiv) {
         fieldContent.textContent = numbers[map[field] - 1];
     } else if (field == "Date") {
         // denote whether date is before or after date guessed
-        if (correctMap.Date < map.Date) {
-            fieldContent.textContent = `< ${map.DateAsString}`;
-        } else if (correctMap.Date > map.Date) {
-            fieldContent.textContent = `${map.DateAsString} >`;
-        } else {
+        if (correctMap.DateAsString == map.DateAsString) {
             fieldContent.textContent = map.DateAsString;
+        } else if (correctMap.Date < map.Date) {
+            fieldContent.textContent = `< ${map.DateAsString}`;
+        } else {
+            fieldContent.textContent = `${map.DateAsString} >`;
         }
+        console.log(correctMap.Date)
+        console.log(map.Date);
     } else {
         fieldContent.textContent = map[field]
     }

@@ -17,7 +17,7 @@ export function loadGuesses() {
         guesses = JSON.parse(guesses)
 
         // convert date back to Date
-        guesses.forEach((guess) => guess.Date = new Date(guess.Date))
+        guesses.forEach((guess) => guess.Date = new Date(guess.DateAsString))
 
         return guesses;
     } else {
