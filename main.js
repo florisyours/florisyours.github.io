@@ -49,7 +49,7 @@ fetchPossibleMaps().then((maps) => {
       guesses.forEach((guess) => createGuess(guess, false))
        //update guesses text
       updateGuesses();
-      checkCorrectOrOutOfGuesses(guesses[guesses.length - 1]);
+      checkCorrectOrOutOfGuesses(guesses[guesses.length - 1], false);
 
   }
 
@@ -136,7 +136,7 @@ function guessMap(map) {
 
         createGuess(map, true);
 
-        checkCorrectOrOutOfGuesses(map);
+        checkCorrectOrOutOfGuesses(map, true);
     } else {
         // invalid map
     }
@@ -203,7 +203,7 @@ function addCreatorsElement(mapDiv, map) {
     mapDiv.appendChild(nameDiv);
 }
 
-async function checkCorrectOrOutOfGuesses(guess) {
+async function checkCorrectOrOutOfGuesses(guess, doDelay) {
     let correct = isSameMap(guess, correctMap);
     let outOfGuesses = guessNumber > maxGuesses;
 
@@ -213,11 +213,13 @@ async function checkCorrectOrOutOfGuesses(guess) {
         // add correct map if they did not get it
         if (!correct) {
             // sleep for a bit so that it does not seem like they got it correct with their latest guess
-            await new Promise(r => setTimeout(r, 500));
+            if (doDelay) await new Promise(r => setTimeout(r, 500));
             createGuess(correctMap, true);
         }
 
         // create button for sharing result
+
+        if (doDelay) await new Promise(r => setTimeout(r, 1500));
         const shareButton = document.createElement('button');
         shareButton.textContent = "Share Results";
         shareButton.className = 'share-button'; 
