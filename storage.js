@@ -12,7 +12,7 @@ export function saveGuesses(guesses) {
 // Load guesses from localStorage if on same game
 export function loadGuesses() {
     const currentGame = localStorage.getItem(CURRENT_GAME_KEY);
-    if (currentGame && currentGame === todaysGameDate) {
+    if (currentGame && currentGame == todaysGameDate) {
         let guesses = localStorage.getItem(STORAGE_KEY);
         guesses = JSON.parse(guesses)
 
