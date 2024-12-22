@@ -36,13 +36,17 @@ fetchPossibleMaps().then((maps) => {
   //console.log('Possible Maps:', maps.possibleMaps);
   allMaps = maps.allMaps;
   possibleMaps = maps.possibleMaps;
-  console.log(possibleMaps)
+
   let firstCorrectMaps = [182, 664, 445, 2]
   
+  if (gameNumber < firstCorrectMaps.length) {
+    correctMap = possibleMaps[firstCorrectMaps[gameNumber]]
+  } else {
+
+  }
   // mod prime returns unique numbers for the entire cycle, which is nice (can break if maps get taken out of ffa and other circumstances, whatever)
   correctMap = possibleMaps[(482 * gameNumber + 182) % mapCutOff];
 
-    console.log(correctMap)
   // load guesses
   const guesses = loadGuesses();
   guessNumber = guesses.length + 1;
@@ -272,7 +276,6 @@ function generateResultsMessage(correct) {
         } else {
             squares += "🟥";
         }
-        console.log(guessScore);
     });
     const wrongEmoji = correct ? "" : "❌";
     return `Minrle #${gameNumber} 👑\n\n${squares}${wrongEmoji}`;
@@ -335,8 +338,6 @@ function createFieldElements(field, map, fieldDiv) {
         } else {
             fieldContent.textContent = `${map.DateAsString} >`;
         }
-        console.log(correctMap.Date)
-        console.log(map.Date);
     } else {
         fieldContent.textContent = map[field]
     }
