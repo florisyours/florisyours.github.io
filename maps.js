@@ -19,6 +19,7 @@ function getUniqueMaps(maps) {
     let uniqueMaps = []
 
     for (let i = 0; i < maps.length; i++) {
+        let score = 0;
         let unique = true;
         for (let j = 0; j < maps.length; j++) {
             if (i === j) continue; // Skip comparing an object with itself
@@ -28,6 +29,9 @@ function getUniqueMaps(maps) {
             // check if all fields are "Correct"
             const allCorrect = Object.values(comparison).every(value => value === "Correct");
 
+            const correctCount = Object.values(comparison).filter(value => value === "Correct").length;
+
+            score += correctCount;
 
             if (allCorrect) {
                 unique = false;
@@ -36,8 +40,13 @@ function getUniqueMaps(maps) {
         if (unique) {
             uniqueMaps.push(maps[i]);
         }
+        //maps[i].uniquenessScore = score;
     }
+    //let mapsToSort = structuredClone(maps);
 
+    //mapsToSort.sort((a, b) => (a.uniquenessScore > b.uniquenessScore) ? 1 : -1);
+
+    //console.log("Sorted Maps by Uniqueness:", mapsToSort);
     return uniqueMaps;
 }
 
