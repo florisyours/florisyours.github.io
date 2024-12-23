@@ -27,8 +27,6 @@ export function loadGuesses(maps) {
             return matchingMap;
         });
 
-        console.log(guesses);
-
         return guesses;
     } else {
         clearGuesses(); // Clear expired data

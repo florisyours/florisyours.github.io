@@ -24,7 +24,7 @@ const firstDay = new Date("2024-12-21T00:00:00Z");
 const now = new Date();
 
 let gameNumber = Math.ceil((now - firstDay) / msToDaysRatio);
-console.log(gameNumber)
+console.log(`This is game number ${gameNumber}!`)
 
 fetchPossibleMaps().then((maps) => {
     //console.log('Possible Maps:', maps.possibleMaps);
@@ -59,7 +59,7 @@ fetchPossibleMaps().then((maps) => {
 });
 
 function getMapOfTheDay(number) {
-    /* spoilers to the right, do not look!!!!                                                                                                                                                            */                                                              let firstCorrectMaps = ["Haunted Tower", "Egghunt 3", "Blight", "Jiga's Claymaze", "ChaosKampf", "E", "Its Better Together", "Resource Parkour"]; // Replace with actual map names
+    /* spoilers to the right, do not look!!!!                                                                                                                                                                                                                                            */let firstCorrectMaps = ["Haunted Tower", "Egghunt 3", "Blight", "Jiga's Claymaze", "ChaosKampf", "E", "Its Better Together", "Resource Parkour"]; // Replace with actual map names
     let map = {};
     if (number < firstCorrectMaps.length) {
         const mapName = firstCorrectMaps[number];
