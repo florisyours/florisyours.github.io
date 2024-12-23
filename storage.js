@@ -10,7 +10,7 @@ export function saveGuesses(guesses) {
 }
 
 // Load guesses from localStorage if on same game
-export function loadGuesses() {
+export function loadGuesses(maps) {
     const today = new Date();
     const todaysGameDate = today.toLocaleDateString("en-US");
     const currentGame = localStorage.getItem(CURRENT_GAME_KEY);
@@ -19,13 +19,32 @@ export function loadGuesses() {
         guesses = JSON.parse(guesses)
 
         // convert date back to Date
-        guesses.forEach((guess) => guess.Date = new Date(guess.DateAsString))
+        //guesses.forEach((guess) => guess.Date = new Date(guess.DateAsString))
+
+        guesses = guesses.map(guess => {
+            const matchingMap = maps.find(map => map.Name === guess.Name);
+            return matchingMap;
+        });
+
+        console.log(guesses);
 
         return guesses;
     } else {
         clearGuesses(); // Clear expired data
         return [];
     }
+}
+
+function findAssociatedObjects(guesses, maps) {
+    return (guesses, maps) => {
+    return guesses.map(guess => {
+        const matchingMap = maps.find(map => map.Name === guess.Name);
+        return {
+            guess: guess,
+            associatedMap: matchingMap || null // Include null if no match is found
+        };
+    });
+};
 }
 
 // Clear guesses from localStorage

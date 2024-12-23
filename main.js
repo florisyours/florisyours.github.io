@@ -23,7 +23,7 @@ const mapCutOff = 701;
 const firstDay = new Date("2024-12-21T00:00:00Z");
 const now = new Date();
 
-const gameNumber = Math.ceil((now - firstDay) / msToDaysRatio);
+let gameNumber = Math.ceil((now - firstDay) / msToDaysRatio);
 console.log(gameNumber)
 
 fetchPossibleMaps().then((maps) => {
@@ -33,20 +33,15 @@ fetchPossibleMaps().then((maps) => {
 
     //console.log(possibleMaps)
   
-    let firstCorrectMaps = ["Haunted Tower", "Egghunt 3", "Blight", "Jiga's Claymaze"]; // Replace with actual map names
+    correctMap = getMapOfTheDay(gameNumber);
 
-    if (gameNumber < firstCorrectMaps.length) {
-        const mapName = firstCorrectMaps[gameNumber];
-        correctMap = possibleMaps.find(map => map.Name == mapName);
-
-        // fallback to the mod function
-        if (!correctMap) {
-             correctMap = possibleMaps[(482 * gameNumber + 182) % mapCutOff];
-        }
-    } else {
-    // mod prime returns unique numbers for the entire cycle, which is nice (can break if maps get taken out of ffa and other circumstances, whatever)
-        correctMap = possibleMaps[(482 * gameNumber + 182) % mapCutOff];
+    // log maps of every day
+    /*
+    for(let i = 0; i < mapCutOff; i++) {
+        console.log(getMapOfTheDay(i));
     }
+
+    console.log(correctMap);*/
 
     // load guesses
     const guesses = loadGuesses(possibleMaps);
@@ -62,6 +57,25 @@ fetchPossibleMaps().then((maps) => {
     }
 
 });
+
+function getMapOfTheDay(number) {
+    /* spoilers to the right, do not look!!!!                                                                                                                                                            */                                                              let firstCorrectMaps = ["Haunted Tower", "Egghunt 3", "Blight", "Jiga's Claymaze", "ChaosKampf", "E", "Its Better Together", "Resource Parkour"]; // Replace with actual map names
+    let map = {};
+    if (number < firstCorrectMaps.length) {
+        const mapName = firstCorrectMaps[number];
+        map = possibleMaps.find(map => map.Name == mapName);
+
+        // fallback to the mod function
+        if (!map) {
+             map = possibleMaps[(482 * number + 182) % mapCutOff];
+        }
+    } else {
+    // mod prime returns unique numbers for the entire cycle, which is nice (can break if maps get taken out of ffa and other circumstances, whatever)
+        map = possibleMaps[(482 * number + 182) % mapCutOff];
+    }
+
+    return map;
+}
 
 
 function updateGuesses() {
@@ -136,7 +150,7 @@ function guessMap(map) {
         guessNumber++;
         
         guesses.push(map);
-        saveGuesses(currentGuesses);
+        saveGuesses(guesses);
 
         // update guess title
         updateGuesses();
@@ -173,10 +187,6 @@ function createGuess(map, doAnimation) {
     }
 
     guessContainer.appendChild(mapDiv);
-
-    console.log(gameNumber);
-    console.log(now);
-    console.log(firstDay);
 
     // compare the guess with the correct map
     const attributes = compareMap(correctMap, map);
@@ -330,10 +340,7 @@ function createFieldElements(field, map, fieldDiv) {
 
     fieldTitle.textContent = properFieldNames[fields.indexOf(field)]
 
-    if (field == "CreatorCount") {
-        let numbers = ["Solo", "Duo", "Three", "Four", "Five", "Six", "Seven", "Eight"];
-        fieldContent.textContent = numbers[map[field] - 1];
-    } else if (field == "Date") {
+    if (field == "Date") {
         // denote whether date is before or after date guessed
         if (correctMap.DateAsString == map.DateAsString) {
             fieldContent.textContent = map.DateAsString;
