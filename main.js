@@ -23,8 +23,8 @@ const mapCutOff = 701;
 const firstDay = new Date("2024-12-21T00:00:00Z");
 const now = new Date();
 
-const gameNumber = Math.ceil((now - firstDay) / msToDaysRatio);
-console.log(gameNumber)
+let gameNumber = Math.ceil((now - firstDay) / msToDaysRatio);
+console.log(`This is game number ${gameNumber}!`)
 
 fetchPossibleMaps().then((maps) => {
     //console.log('Possible Maps:', maps.possibleMaps);
@@ -32,18 +32,19 @@ fetchPossibleMaps().then((maps) => {
     possibleMaps = maps.possibleMaps;
 
     //console.log(possibleMaps)
-
-    let firstCorrectMaps = [182, 664, 445, 2]
   
-    if (gameNumber < firstCorrectMaps.length) {
-        correctMap = possibleMaps[firstCorrectMaps[gameNumber]]
-    } else {
-    // mod prime returns unique numbers for the entire cycle, which is nice (can break if maps get taken out of ffa and other circumstances, whatever)
-        correctMap = possibleMaps[(482 * gameNumber + 182) % mapCutOff];
+    correctMap = getMapOfTheDay(gameNumber);
+
+    // log maps of every day
+    /*
+    for(let i = 0; i < mapCutOff; i++) {
+        console.log(getMapOfTheDay(i));
     }
 
+    console.log(correctMap);*/
+
     // load guesses
-    const guesses = loadGuesses();
+    const guesses = loadGuesses(possibleMaps);
     guessNumber = guesses.length + 1;
     if (guessNumber > 1) {
         console.log("Loaded guesses:", guesses);
@@ -56,6 +57,25 @@ fetchPossibleMaps().then((maps) => {
     }
 
 });
+
+function getMapOfTheDay(number) {
+    /* spoilers to the right, do not look!!!!                                                                                                                                                                                                                                            */let firstCorrectMaps = ["Haunted Tower", "Egghunt 3", "Blight", "Jiga's Claymaze", "ChaosKampf", "E", "Its Better Together", "Resource Parkour"]; // Replace with actual map names
+    let map = {};
+    if (number < firstCorrectMaps.length) {
+        const mapName = firstCorrectMaps[number];
+        map = possibleMaps.find(map => map.Name == mapName);
+
+        // fallback to the mod function
+        if (!map) {
+             map = possibleMaps[(482 * number + 182) % mapCutOff];
+        }
+    } else {
+    // mod prime returns unique numbers for the entire cycle, which is nice (can break if maps get taken out of ffa and other circumstances, whatever)
+        map = possibleMaps[(482 * number + 182) % mapCutOff];
+    }
+
+    return map;
+}
 
 
 function updateGuesses() {
@@ -121,17 +141,16 @@ document.querySelector('.input').addEventListener('keydown', (event) => {
 });
 
 function guessMap(map) {
-    let guesses = loadGuesses();
+    let guesses = loadGuesses(possibleMaps);
     console.log(guesses)
 
     // check if guesses contains map, have to compare strings because === does not work
     let containsMap = guesses.some(guess => JSON.stringify(guess) === JSON.stringify(map))
     if (map && !containsMap) {
         guessNumber++;
-
-        const currentGuesses = loadGuesses();
-        currentGuesses.push(map);
-        saveGuesses(currentGuesses);
+        
+        guesses.push(map);
+        saveGuesses(guesses);
 
         // update guess title
         updateGuesses();
@@ -168,10 +187,6 @@ function createGuess(map, doAnimation) {
     }
 
     guessContainer.appendChild(mapDiv);
-
-    console.log(gameNumber);
-    console.log(now);
-    console.log(firstDay);
 
     // compare the guess with the correct map
     const attributes = compareMap(correctMap, map);
@@ -251,7 +266,7 @@ function copyToClipboard(text) {
 // function to generate the results message
 function generateResultsMessage(correct) {
     let squares = ""; 
-    let guesses = loadGuesses();
+    let guesses = loadGuesses(possibleMaps);
     guesses.forEach((guess) => {
         const attributes = compareMap(guess, correctMap);
 
@@ -325,10 +340,7 @@ function createFieldElements(field, map, fieldDiv) {
 
     fieldTitle.textContent = properFieldNames[fields.indexOf(field)]
 
-    if (field == "CreatorCount") {
-        let numbers = ["Solo", "Duo", "Three", "Four", "Five", "Six", "Seven", "Eight"];
-        fieldContent.textContent = numbers[map[field] - 1];
-    } else if (field == "Date") {
+    if (field == "Date") {
         // denote whether date is before or after date guessed
         if (correctMap.DateAsString == map.DateAsString) {
             fieldContent.textContent = map.DateAsString;

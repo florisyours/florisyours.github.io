@@ -18,7 +18,13 @@ export function loadGuesses() {
         guesses = JSON.parse(guesses)
 
         // convert date back to Date
-        guesses.forEach((guess) => guess.Date = new Date(guess.DateAsString))
+        //guesses.forEach((guess) => guess.Date = new Date(guess.DateAsString))
+
+        // update guesses in case information got outdated
+        guesses = guesses.map(guess => {
+            const matchingMap = maps.find(map => map.Name === guess.Name);
+            return matchingMap;
+        });
 
         return guesses;
     } else {

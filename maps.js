@@ -40,11 +40,13 @@ function getUniqueMaps(maps) {
         if (unique) {
             uniqueMaps.push(maps[i]);
         }
-        //maps[i].uniquenessScore = score;
-    }
-    //let mapsToSort = structuredClone(maps);
 
-    //mapsToSort.sort((a, b) => (a.uniquenessScore > b.uniquenessScore) ? 1 : -1);
+        // track how "unique" a map is, lower number = more unique
+        maps[i].uniquenessScore = score;
+    }
+    let mapsToSort = structuredClone(maps);
+
+    mapsToSort.sort((a, b) => (a.uniquenessScore > b.uniquenessScore) ? 1 : -1);
 
     //console.log("Sorted Maps by Uniqueness:", mapsToSort);
     return uniqueMaps;
@@ -57,7 +59,7 @@ function csvToObjects(csv) {
     let row = csvSplit(csvRows[i]);
 
     // check if map has been removed, do not include in this case
-    if (!(row[7] == "Removed" && row[7] == "Broken")) {
+    if (!(row[7] == "Removed" || row[7] == "Broken")) {
         addRow(row, objects);
     }
 
@@ -73,15 +75,17 @@ function addRow(row, objects) {
 
     thisObject["Name"] = row[0];
     thisObject["Creators"] = row[1];
-    thisObject["CreatorCount"] = countOccurences(row[1], ",") + 1;
+    thisObject["CreatorCount"] = getCreatorCount(row[1]);
     thisObject["Type"] = row[2];
     if (row[3].includes("-")) {
         thisObject["PureOrMixed"] = "Pure";
     } else {
         thisObject["PureOrMixed"] = "Mixed";
     }
-    // HC maps include FFA+ in the name if they are FFA+
-    if (row[7].includes("FFA+")) {
+    // HC maps have different characters in them
+    /*if (row[7].includes("HC")) {
+        thisObject["Location"] = "HC";
+    } else */if (row[7].includes("FFA+")) {
         thisObject["Location"] = "FFA+";
       } else {
         thisObject["Location"] = "FFA";
@@ -92,6 +96,16 @@ function addRow(row, objects) {
     thisObject["DateAsString"] = row[9];
     
     objects.push(thisObject);
+}
+
+function getCreatorCount(creators) {
+    if (creators.includes("Community")) {
+        return "Community"
+    } else {
+        let numbers = ["Solo", "Duo", "Three", "Four", "Five", "Six", "Seven", "Eight"];
+        let creatorCount = countOccurences(creators, ",") + 1;
+        return numbers[creatorCount - 1]
+    }
 }
 
 function countOccurences(str, find) {
