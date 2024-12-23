@@ -23,6 +23,9 @@ const mapCutOff = 701;
 const firstDay = new Date("2024-12-21T00:00:00Z");
 const now = new Date();
 
+console.log(firstDay)
+console.log(now)
+
 let gameNumber = Math.ceil((now - firstDay) / msToDaysRatio);
 console.log(`This is game number ${gameNumber}!`)
 
@@ -44,7 +47,7 @@ fetchPossibleMaps().then((maps) => {
     console.log(correctMap);*/
 
     // load guesses
-    const guesses = loadGuesses(possibleMaps);
+    const guesses = loadGuesses(allMaps);
     guessNumber = guesses.length + 1;
     if (guessNumber > 1) {
         console.log("Loaded guesses:", guesses);
@@ -141,7 +144,7 @@ document.querySelector('.input').addEventListener('keydown', (event) => {
 });
 
 function guessMap(map) {
-    let guesses = loadGuesses(possibleMaps);
+    let guesses = loadGuesses(allMaps);
     console.log(guesses)
 
     // check if guesses contains map, have to compare strings because === does not work
@@ -266,7 +269,7 @@ function copyToClipboard(text) {
 // function to generate the results message
 function generateResultsMessage(correct) {
     let squares = ""; 
-    let guesses = loadGuesses(possibleMaps);
+    let guesses = loadGuesses(allMaps);
     guesses.forEach((guess) => {
         const attributes = compareMap(guess, correctMap);
 
