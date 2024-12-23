@@ -21,6 +21,7 @@ export function loadGuesses(maps) {
         // convert date back to Date
         //guesses.forEach((guess) => guess.Date = new Date(guess.DateAsString))
 
+        // update guesses in case information got outdated
         guesses = guesses.map(guess => {
             const matchingMap = maps.find(map => map.Name === guess.Name);
             return matchingMap;
@@ -33,18 +34,6 @@ export function loadGuesses(maps) {
         clearGuesses(); // Clear expired data
         return [];
     }
-}
-
-function findAssociatedObjects(guesses, maps) {
-    return (guesses, maps) => {
-    return guesses.map(guess => {
-        const matchingMap = maps.find(map => map.Name === guess.Name);
-        return {
-            guess: guess,
-            associatedMap: matchingMap || null // Include null if no match is found
-        };
-    });
-};
 }
 
 // Clear guesses from localStorage
