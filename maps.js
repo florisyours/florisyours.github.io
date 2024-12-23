@@ -83,9 +83,9 @@ function addRow(row, objects) {
         thisObject["PureOrMixed"] = "Mixed";
     }
     // HC maps have different characters in them
-    if (row[7].includes("HC")) {
+    /*if (row[7].includes("HC")) {
         thisObject["Location"] = "HC";
-    } else if (row[7].includes("FFA+")) {
+    } else */if (row[7].includes("FFA+")) {
         thisObject["Location"] = "FFA+";
       } else {
         thisObject["Location"] = "FFA";
