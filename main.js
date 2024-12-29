@@ -62,7 +62,7 @@ fetchPossibleMaps().then((maps) => {
 });
 
 function getMapOfTheDay(number) {
-    /* spoilers to the right, do not look!!!!                                                                                                                                                                                                                                            */let firstCorrectMaps = ["Haunted Tower", "Egghunt 3", "Blight", "Jiga's Claymaze", "Chaoskampf", "E", "Trick or Treat", "Its Better Together", "Resource Parkour", "Bugs", "Desert Bus", "Factory", "Minas Tirith"]; // Replace with actual map names
+    /* spoilers to the right, do not look!!!!                                                                                                                                                                                                                                            */let firstCorrectMaps = ["Haunted Tower", "Egghunt 3", "Blight", "Jiga's Claymaze", "Chaoskampf", "E", "Trick or Treat", "Its Better Together", "Resource Parkour", "Bugs", "Minas Tirith", "Factory"]; // Replace with actual map names
     let map = {};
     if (number < firstCorrectMaps.length) {
         const mapName = firstCorrectMaps[number];
