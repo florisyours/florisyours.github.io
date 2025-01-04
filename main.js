@@ -1,7 +1,7 @@
 // what only 1 web programming class does to a mf. ugly code and structure ahead!!! i did not care enough
 
-import { fetchPossibleMaps, compareMap } from './maps.js';
-import { saveState, loadState } from './storage.js'
+import { fetchPossibleMaps, compareMap } from './mapsv2.js';
+import { saveState, loadState } from './storagev2.js'
 var allMaps = [];
 var possibleMaps = [];
 var guessableMaps = [];
