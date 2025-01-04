@@ -64,6 +64,17 @@
             </div>
         </div>
 
+        <!--change game number title for it to be faster-->
+        <script>
+            const firstDay = new Date("2024 Dec 21");
+            const now = new Date();
+            const msToDaysRatio = 1000 * 60 * 60 * 24;
+        
+            const gameNumber = Math.ceil((now - firstDay) / msToDaysRatio);
+            
+            // Insert the calculated gameNumber directly into the HTML
+            document.querySelector('.title__text').innerHTML = `Minrle #${gameNumber}`;
+        </script>
         <script type="module" src="main.js?v=1.2.2"></script>
     </body>
 </html>
