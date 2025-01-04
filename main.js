@@ -187,6 +187,11 @@ function guessMap(map) {
         guessNumber++;
         
         guesses.push(map);
+
+        if (easyModeAtStep > 0) {
+            updateGuessableMaps(guesses);
+        }
+
         saveState(guesses, easyModeAtStep);
 
         // update guess title
@@ -458,9 +463,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (correctDate - timeDifferenceForClose > beforeBoundary) {
         beforeBoundary += timeDifferenceForClose;
     }
-
-    console.log(new Date(afterBoundary))
-    console.log(new Date(beforeBoundary));
 
     guessableMaps = allMaps.filter(map => {
         let mapDate = map.Date.getTime();
