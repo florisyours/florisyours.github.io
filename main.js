@@ -1,17 +1,20 @@
 // what only 1 web programming class does to a mf. ugly code and structure ahead!!! i did not care enough
 
 import { fetchPossibleMaps, compareMap } from './maps.js';
-import { saveGuesses, loadGuesses } from './storage.js'
+import { saveState, loadState } from './storage.js'
 var allMaps = [];
 var possibleMaps = [];
+var guessableMaps = [];
 var correctMap = {};
 
 // Get references to the input element and suggestions container
 const inputElement = document.querySelector('.input');
 const suggestionsElement = document.querySelector('.suggestions');
+const easyModeButton = document.querySelector('.easy-mode-button');
 
 // top map of suggestions for if they press enter
 let topSuggestion;
+let easyModeAtStep = 0;
 let guessNumber = 1;
 const maxGuesses = 10;
 const scoreForYellowSquare = 3;
@@ -27,28 +30,21 @@ console.log(firstDay)
 console.log(now)
 
 let gameNumber = Math.ceil((now - firstDay) / msToDaysRatio);
-console.log(`This is game number ${gameNumber}!`)
+console.log(`This is game number ${gameNumber}!`);
+
+const titleTextElement = document.querySelector('.title__text');
+titleTextElement.textContent = `Minrle #${gameNumber}`;
 
 fetchPossibleMaps().then((maps) => {
-    //console.log('Possible Maps:', maps.possibleMaps);
     allMaps = maps.allMaps;
     possibleMaps = maps.possibleMaps;
-
-    //console.log(possibleMaps)
+    guessableMaps = maps.allMaps;
   
     correctMap = getMapOfTheDay(gameNumber);
 
-    // log maps of every day
-    /*
-    for(let i = 0; i < mapCutOff; i++) {
-        console.log(getMapOfTheDay(i));
-    }
+    // load state
+    let guesses = getGuesses();
 
-    console.log(correctMap);*/
-
-    // load guesses
-    const guesses = loadGuesses(allMaps);
-    guessNumber = guesses.length + 1;
     if (guessNumber > 1) {
         console.log("Loaded guesses:", guesses);
 
@@ -59,6 +55,10 @@ fetchPossibleMaps().then((maps) => {
 
     }
 
+    // disable button if easy mode is enabled
+    if (easyModeAtStep > 0) {
+        disableEasyModeButton();
+    }
 });
 
 function getMapOfTheDay(number) {
@@ -89,19 +89,39 @@ function updateGuesses() {
 // listen to input in input box
 inputElement.addEventListener('input', (event) => {
     const query = event.target.value.toLowerCase(); // get the input value
+    let isUsingEasyMode = easyModeAtStep > 0
 
-    // clear suggestions if query is empty
-    if (query == "") {
+    // clear suggestions if query is empty and easy mode is not on
+    if (query == "" && !isUsingEasyMode) {
         suggestionsElement.innerHTML = '';
         return;
     }
-    const filteredMaps = allMaps.filter(map =>
+    const filteredMaps = guessableMaps.filter(map =>
         map.Name.toLowerCase().startsWith(query) // match starting letters
     )
 
     topSuggestion = filteredMaps[0];
 
     updateSuggestions(filteredMaps);
+});
+
+// Clear suggestions when the input loses focus if easy mode is on
+inputElement.addEventListener('blur', () => {
+    let isUsingEasyMode = easyModeAtStep > 0;
+    if (isUsingEasyMode) {
+        // clear suggestions after a bit, otherwise clicking maps does not trigger 
+        setTimeout(() => {
+            suggestionsElement.innerHTML = '';
+        }, 100);
+    }
+});
+
+// show suggestions when input is in focus and easy mode is on
+inputElement.addEventListener('focus', () => {
+    let isUsingEasyMode = easyModeAtStep > 0;
+    if (isUsingEasyMode) {
+        updateSuggestions(guessableMaps);
+    }
 });
 
 // function to update the suggestions
@@ -113,11 +133,11 @@ function updateSuggestions(maps) {
     maps.forEach(map => {
         const li = document.createElement('li');
         li.textContent = map.Name;
-
         // optionally, click suggestion to enter answer
         li.addEventListener('click', () => {
             inputElement.value = "" // empty input
             suggestionsElement.innerHTML = ''; // clear suggestions
+            console.log(map);
             guessMap(map);
         });
 
@@ -128,10 +148,14 @@ function updateSuggestions(maps) {
 document.querySelector('.input').addEventListener('keydown', (event) => {
     if (event.key === 'Enter') {
         const input = event.target.value.trim(); // get the entered map name
-        let map = allMaps.find(m => m.Name.toLowerCase() === input.toLowerCase()); // case-insensitive match
+        let map = guessableMaps.find(m => m.Name.toLowerCase() === input.toLowerCase()); // case-insensitive match
 
         if (!map) {
             map = topSuggestion
+        }
+
+        if (!map) {
+            return;
         }
 
         // clear input field
@@ -143,8 +167,18 @@ document.querySelector('.input').addEventListener('keydown', (event) => {
     }
 });
 
+// load state and return current guesses
+function getGuesses() {
+    const gameState = loadState(allMaps);
+    let guesses = gameState.guesses;
+    guessNumber = guesses.length + 1;
+    easyModeAtStep = gameState.easyModeAtStep;
+    if (easyModeAtStep > 0) updateGuessableMaps(guesses);
+    return guesses;
+}
+
 function guessMap(map) {
-    let guesses = loadGuesses(allMaps);
+    let guesses = getGuesses();
     console.log(guesses)
 
     // check if guesses contains map, have to compare strings because === does not work
@@ -153,7 +187,7 @@ function guessMap(map) {
         guessNumber++;
         
         guesses.push(map);
-        saveGuesses(guesses);
+        saveState(guesses, easyModeAtStep);
 
         // update guess title
         updateGuesses();
@@ -233,6 +267,7 @@ async function checkCorrectOrOutOfGuesses(guess, doDelay) {
 
     if (outOfGuesses || correct) {
         document.querySelector('.input').disabled = true; // disables input field
+        disableEasyModeButton();
 
         // add correct map if they did not get it
         if (!correct) {
@@ -269,8 +304,11 @@ function copyToClipboard(text) {
 // function to generate the results message
 function generateResultsMessage(correct) {
     let squares = ""; 
-    let guesses = loadGuesses(allMaps);
-    guesses.forEach((guess) => {
+
+    let guesses = getGuesses();
+
+    for(let i = 0; i < guesses.length; i++) {
+        let guess = guesses[i];
         const attributes = compareMap(guess, correctMap);
 
         // calculate the score for this guess
@@ -283,7 +321,6 @@ function generateResultsMessage(correct) {
             }
         }
 
-
         if (guessScore >= scoreForYellowSquare) {
             if (isSameMap(guess, correctMap)) {
                 squares += "✅";
@@ -293,7 +330,7 @@ function generateResultsMessage(correct) {
         } else {
             squares += "🟥";
         }
-    });
+    }
     const wrongEmoji = correct ? "" : "❌";
     return `Minrle #${gameNumber} 👑\n\n${squares}${wrongEmoji}`;
 }
@@ -389,4 +426,67 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   });
+
+  // easy mode code, where guessable maps are within range of date
+
+  function updateGuessableMaps(guesses) {
+    const correctDate = correctMap.Date.getTime();
+
+    let beforeBoundary = new Date("2000-01-01T00:00:00Z").getTime();
+    let afterBoundary = new Date("2500-01-01T00:00:00Z").getTime();
+
+    guesses.forEach((map) => {
+        let mapDate = map.Date.getTime();
+        // get latest guess that is still before correctDate
+        if (mapDate <= correctDate && beforeBoundary < mapDate) {
+            beforeBoundary = mapDate;
+        }
+
+        // and get earliest guess that is still after correctDate
+        if (mapDate >= correctDate && afterBoundary > mapDate) {
+            afterBoundary = mapDate;
+        }
+    })
+
+    const timeDifferenceForClose = 500 * msToDaysRatio;
+
+    // bring boundaries closer if they are not within 500 days of the correct date, as those maps would be impossible to be correct
+    if (correctDate + timeDifferenceForClose < afterBoundary) {
+        afterBoundary -= timeDifferenceForClose;
+    }
+
+    if (correctDate - timeDifferenceForClose > beforeBoundary) {
+        beforeBoundary += timeDifferenceForClose;
+    }
+
+    console.log(new Date(afterBoundary))
+    console.log(new Date(beforeBoundary));
+
+    guessableMaps = allMaps.filter(map => {
+        let mapDate = map.Date.getTime();
+        // only allow maps that are after the first boundary if it is after, or if they're the correct date
+        let afterBeforeBoundary = mapDate > beforeBoundary || mapDate === correctDate;
+        let beforeAfterBoundary = mapDate < afterBoundary || mapDate === correctDate;
+
+        if (afterBeforeBoundary && beforeAfterBoundary) {
+            return map;
+        }
+
+    });
+
+    //console.log("Updated guessableMaps:", guessableMaps);
+  }
+
+// copy result if clicked
+easyModeButton.addEventListener('click', () => {
+    let guesses = getGuesses();
+    easyModeAtStep = guessNumber;
+    saveState(guesses, easyModeAtStep);
+    updateGuessableMaps(guesses);
+    disableEasyModeButton();
+});
+
+function disableEasyModeButton() {
+    easyModeButton.disabled = true;
+}
 

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <head>
-    <link rel="stylesheet" type="text/css" href="main.css?v=1.1.1">
+    <link rel="stylesheet" type="text/css" href="main.css?v=1.2.0">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
 </head>
@@ -8,7 +8,7 @@
     <body>
         <div class = "title">
             <img src = "crown.png" class = "logo">
-            <h1>
+            <h1 class = "title__text">
                 Minrle
             </h1>
             <img src = "crown.png" class = "logo">
@@ -18,16 +18,24 @@
             <h4 class = "guesses_box">
                 Guess 1 out of 10
             </h4>
+
+            <button class = "easy-mode-button">
+                Easy Mode
+            </button>
             <div class="tooltip-container">
                  ? 
                 <div class="tooltip-text">
                     Each guess reveals information about the map. <br> <br>
+
                     Gray tiles represent wrong guesses, yellow tiles represent close guesses, and green tiles represent correct ones. <br> <br>
                     - Released is close if the date is within 500 days, and difficulty is close if it is within 1 difficulty level. <br>
                     - Unassessed maps are included, and are 1 difficulty below Very Easy. <br> 
                     - Location can only be FFA or FFA+, not HC. HC maps can be FFA+. <br>
                     - The arrow > means that the correct map was released later, and vice-versa. <br>
                     - Maps that credit the Community are labeled as such in Creators. <br> <br>
+
+                    Easy mode removes maps that do not fit the date criteria. <br> <br>
+
                     That's it! Have fun guessing!
 
                     <button class="close-btn" >✖</button>
@@ -56,6 +64,6 @@
             </div>
         </div>
 
-        <script type="module" src="main.js?v=1.1.7"></script>
+        <script type="module" src="main.js?v=1.2.0"></script>
     </body>
 </html>

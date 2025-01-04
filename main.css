@@ -29,12 +29,12 @@ body {
     align-items: center;
 }
 
-h1 {
+.title__text {
     text-align: center;
     color: #ffaa00;
     margin-left: 20px;
     margin-right: 20px;
-    font-size: 30px;
+    font-size: 28px;
     margin-top: 30px;
 }
 
@@ -51,10 +51,33 @@ h1 {
 
 .guesses_box {
     color: #ffffff;
-    font-size: 15px;
+    font-size: 18px;
     text-align: start;
-    height: 18px;
     align-self: flex-end;
+}
+
+.easy-mode-button {
+    padding: 0px 15px;
+    background-color: #777777;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-bottom: 2px;
+    height: 18px;
+    font-size: 10px;
+
+    align-self: flex-end;
+}
+
+.easy-mode-button:hover {
+    background-color: #555555;
+}
+
+.easy-mode-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
 }
 
 .tooltip-container {

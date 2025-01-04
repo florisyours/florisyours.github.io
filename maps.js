@@ -54,22 +54,39 @@ function getUniqueMaps(maps) {
 
 function csvToObjects(csv) {
   const csvRows = csv.split("\n");
-  let objects = [];
+  let maps = [];
   for (let i = 1, max = csvRows.length; i < max; i++) {
     let row = csvSplit(csvRows[i]);
 
-    // check if map has been removed, do not include in this case
-    if (!(row[7] == "Removed" || row[7] == "Broken")) {
-        addRow(row, objects);
+    if (isValidMap(row)) {
+        let map = getMapObject(row);
+        maps.push(map);
     }
 
   }
-  return objects;
+  return maps;
+}
+
+function isValidMap(row) {
+
+    // ignore removed maps
+    if (row[7] == "Removed" || row[7] == "Broken") {
+        return false
+    }
+
+
+    // see if date is valid
+    let date = row[9].replace(/\s+/g, ' ');
+
+    if (isNaN(new Date(date))) {
+        return false;
+    }
+
+    return true;
 }
 
 
-
-function addRow(row, objects) {
+function getMapObject(row) {
 
     let thisObject = {};
 
@@ -95,7 +112,7 @@ function addRow(row, objects) {
     thisObject["Date"] = new Date(row[9]);
     thisObject["DateAsString"] = row[9];
     
-    objects.push(thisObject);
+    return thisObject;
 }
 
 function getCreatorCount(creators) {
