@@ -71,6 +71,11 @@ body {
     align-self: flex-end;
 }
 
+.easy-mode-button--on {
+    background-color: #555555;
+    opacity: 0.5;
+}
+
 .easy-mode-button:hover {
     background-color: #555555;
 }

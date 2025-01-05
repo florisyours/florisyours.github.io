@@ -179,7 +179,6 @@ function getGuesses() {
 
 function guessMap(map) {
     let guesses = getGuesses();
-    console.log(guesses)
 
     // check if guesses contains map, have to compare strings because === does not work
     let containsMap = guesses.some(guess => JSON.stringify(guess) === JSON.stringify(map))
@@ -190,6 +189,9 @@ function guessMap(map) {
 
         if (easyModeAtStep > 0) {
             updateGuessableMaps(guesses);
+            console.log(easyModeAtStep)
+            // set easy mode button in place if it was enabled before first guess
+            disableEasyModeButton();
         }
 
         saveState(guesses, easyModeAtStep);
@@ -482,13 +484,24 @@ document.addEventListener("DOMContentLoaded", () => {
 // copy result if clicked
 easyModeButton.addEventListener('click', () => {
     let guesses = getGuesses();
-    easyModeAtStep = guessNumber;
+    if (guessNumber == 1) {
+        easyModeAtStep = 1 - easyModeAtStep;
+    } else {
+        easyModeAtStep = guessNumber;
+    }
     saveState(guesses, easyModeAtStep);
     updateGuessableMaps(guesses);
     disableEasyModeButton();
 });
 
 function disableEasyModeButton() {
-    easyModeButton.disabled = true;
+    if (easyModeAtStep > 1 || guessNumber > 1) {
+        easyModeButton.disabled = true;
+        easyModeButton.classList.remove("easy-mode-button--on");
+    } else if (easyModeAtStep == 1) {
+        easyModeButton.classList.add("easy-mode-button--on");
+    } else {
+        easyModeButton.classList.remove("easy-mode-button--on");
+    }
 }
 
