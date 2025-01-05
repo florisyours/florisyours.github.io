@@ -328,6 +328,11 @@ function generateResultsMessage(correct) {
             }
         }
 
+        // displays tool to signify easy mode was enabled, does not show if user guessed first try anyways
+        if (i + 1 == easyModeAtStep && i != 0) {
+            squares += "🛠️";
+        }
+
         if (guessScore >= scoreForYellowSquare) {
             if (isSameMap(guess, correctMap)) {
                 squares += "✅";
