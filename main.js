@@ -20,7 +20,10 @@ const maxGuesses = 10;
 const scoreForYellowSquare = 3;
 const msToDaysRatio = 1000 * 60 * 60 * 24;
 // update this once in a while for new maps to come in
-const mapCutOff = 701;
+const mapCutOff = 710;
+
+// seed for randomizer
+let mapSeed = 9325098;
 
 // start date in UTC
 const firstDay = new Date("2024-12-21T00:00:00Z");
@@ -59,11 +62,18 @@ fetchPossibleMaps().then((maps) => {
     if (easyModeAtStep > 0) {
         disableEasyModeButton();
     }
+
+    // debug: find map of the day for each day
+    /*
+    for (let i = 0; i < 750; i++) {
+        console.log(`${i}: ${getMapOfTheDayTwo(i).Name}`);
+    }*/
 });
 
-function getMapOfTheDay(number) {
+// OLD VERSION
+//function getMapOfTheDay(number) {
     /* spoilers to the right, do not look!!!!                                                                                                                                                                                                                                            */let firstCorrectMaps = ["Haunted Tower", "Egghunt 3", "Blight", "Jiga's Claymaze", "Chaoskampf", "E", "Trick or Treat", "Its Better Together", "Resource Parkour", "Bugs", "Minas Tirith", "Factory", "Uluru", "Super Minr Kart", "Mean Messages 2: Electric Boogaloo", "Wolly Mammoth", "Retro Runner Tapper", "To Be Kind", "CodSimulator20XX"]; // Replace with actual map names
-    let map = {};
+    /*let map = {};
     if (number < firstCorrectMaps.length) {
         const mapName = firstCorrectMaps[number];
         map = possibleMaps.find(map => map.Name == mapName);
@@ -78,6 +88,55 @@ function getMapOfTheDay(number) {
     }
 
     return map;
+}*/
+
+function getMapOfTheDay(number) {
+    /* spoilers to the right, do not look!!!!                                                                                                                                                                                                                                            */let firstCorrectMaps = ["Haunted Tower", "Egghunt 3", "Blight", "Jiga's Claymaze", "Chaoskampf", "E", "Trick or Treat", "Its Better Together", "Resource Parkour", "Bugs", "Minas Tirith", "Factory", "Uluru", "Super Minr Kart", "Mean Messages 2: Electric Boogaloo", "Wolly Mammoth", "Retro Runner Tapper", "To Be Kind", "CodSimulator20XX"]; // Replace with actual map names
+    let map = {};
+    let fallbackToRandomMap = true;
+
+    if (number < firstCorrectMaps.length) {
+        const mapName = firstCorrectMaps[number];
+        map = possibleMaps.find(map => map.Name == mapName);
+
+        // fallback to the mod function
+        if (map) {
+             fallbackToRandomMap = false;
+        }
+    }
+
+    // shuffle all possible maps and take the map at index number
+    if (fallbackToRandomMap) {
+        let mapIndices = Array.from(Array(mapCutOff).keys())
+        mapIndices = shuffle(mapIndices, mapSeed);
+        let randomIndex = mapIndices[number%mapCutOff];
+        map = possibleMaps[randomIndex];
+    }
+
+    // fallback JUST IN CASE
+    if (!map) map = possibleMaps[0]
+
+    return map;
+}
+
+// randomize map list with a seed to generate random map:
+function random(seed) {
+    return function() {
+        seed = (seed * 16807) % 2147483647;
+        return (seed - 1) / 2147483646;
+    };
+}
+
+function shuffle(array, seed) {
+    let rng = random(seed);
+    let shuffled = array.slice(); // Copy array to avoid mutation
+
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        let j = Math.floor(rng() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+
+    return shuffled;
 }
 
 
